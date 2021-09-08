@@ -41,7 +41,21 @@ export default function Hero() {
         zIndex="-234"
         // opacity=".8"
         // backgroundSize="180% 180%"
-        clipPath="polygon(0 0, 100% 0, 100% 29%, 0 85%)"
+        d={{ base: "block", md: "none" }}
+        clipPath="polygon(0 0, 100% 0, 100% 29%, 0 51%)"
+        animation={animation}
+        bgGradient="linear(#B4BFF8 0%, #F8b4b4 25%, #f8e9b4 50%)"></Box>
+      <Box
+        width="100%"
+        height="100vh"
+        position="absolute"
+        top="0"
+        left="0"
+        zIndex="-234"
+        // opacity=".8"
+        // backgroundSize="180% 180%"
+        d={{ base: "none", md: "block" }}
+        clipPath="polygon(0 0, 100% 0, 100% 25%, 0 88%)"
         animation={animation}
         bgGradient="linear(#B4BFF8 0%, #F8b4b4 25%, #f8e9b4 50%)"></Box>
       <Container maxW={"5xl"}>

@@ -94,6 +94,17 @@ export default function Blogs() {
             <BlogCard />
           </Carousel>
         </Box>
+        <Box
+          width="100%"
+          height="100px"
+          position="absolute"
+          right="-5px"
+          left="0"
+          bottom="-5px"
+          zIndex="234"
+          bg="white"
+          // polygon(0 0, 100% 0, 100% 17%, 0 100%)
+          clipPath="polygon(0 84%, 100% 17%, 100% 100%, 0 100%)"></Box>
       </Stack>
     </Container>
   );

@@ -7,22 +7,43 @@ import {
   Text,
   Button,
   Image,
+  keyframes,
+  usePrefersReducedMotion,
 } from "@chakra-ui/react";
 
 import { PhoneIcon } from "@chakra-ui/icons";
 import LandinPageHeader from "../../components/Header.LandingPage";
-export default function CallToActionWithVideo() {
+const gradientAnimation = keyframes`
+     0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+`;
+export default function Hero() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  const animation = prefersReducedMotion
+    ? undefined
+    : `${gradientAnimation}  6s ease infinite`;
   return (
     <Box width="100%" position={"relative"}>
       <Box
         width="100%"
-        height="100%"
+        height="100vh"
         position="absolute"
-        bottom="0"
+        top="0"
         left="0"
         zIndex="-234"
-        bgGradient="linear(red.100 0%, orange.100 25%, yellow.100 50%)"
-        clipPath="circle(51.2% at 9% 9%);"></Box>
+        // opacity=".8"
+        // backgroundSize="180% 180%"
+        clipPath="polygon(0 0, 100% 0, 100% 29%, 0 85%)"
+        animation={animation}
+        bgGradient="linear(red.500 0%, pink.500 25%, yellow.500 50%)"></Box>
       <Container maxW={"5xl"}>
         <LandinPageHeader />
         <Stack

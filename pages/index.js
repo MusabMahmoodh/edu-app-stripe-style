@@ -6,7 +6,6 @@ import LandinPageHeader from "../components/Header.LandingPage";
 export default function Home() {
   return (
     <div>
-      <LandinPageHeader />
       <Hero />
     </div>
   );

@@ -23,7 +23,7 @@ export default function CallToActionWithVideo() {
         zIndex="-234"
         bgGradient="linear(red.100 0%, orange.100 25%, yellow.100 50%)"
         clipPath="circle(51.2% at 9% 9%);"></Box>
-      <Container maxW="container.xl">
+      <Container maxW={"5xl"}>
         <LandinPageHeader />
         <Stack
           align={"center"}

@@ -43,7 +43,7 @@ export default function Hero() {
         // backgroundSize="180% 180%"
         clipPath="polygon(0 0, 100% 0, 100% 29%, 0 85%)"
         animation={animation}
-        bgGradient="linear(red.500 0%, pink.500 25%, yellow.500 50%)"></Box>
+        bgGradient="linear(#B4BFF8 0%, #F8b4b4 25%, #f8e9b4 50%)"></Box>
       <Container maxW={"5xl"}>
         <LandinPageHeader />
         <Stack
@@ -56,19 +56,7 @@ export default function Hero() {
               lineHeight={1.1}
               fontWeight={600}
               fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}>
-              <Text
-                as={"span"}
-                position={"relative"}
-                _after={{
-                  content: "''",
-                  width: "full",
-                  height: "30%",
-                  position: "absolute",
-                  bottom: 1,
-                  left: 0,
-                  bg: "blue.400",
-                  zIndex: -1,
-                }}>
+              <Text as={"span"} position={"relative"}>
                 Learn Anywhere,
               </Text>
               <br />
@@ -81,9 +69,7 @@ export default function Hero() {
               code snippets, categorize them, and even sync them in the cloud so
               you can use them anywhere. All that is free!
             </Text>
-            <Stack
-              spacing={{ base: 4, sm: 6 }}
-              direction={{ base: "column", sm: "row" }}>
+            <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "row" }}>
               <Link href="https://6138d7873a0d100007664956--eduappdashboard.netlify.app/signin">
                 <Button
                   rounded={"full"}
@@ -91,17 +77,11 @@ export default function Hero() {
                   fontWeight={"normal"}
                   px={6}
                   colorScheme={"blue"}
-                  bg={"blue.400"}
-                  _hover={{ bg: "blue.500" }}>
+                  _hover={{ bg: "blue.100" }}>
                   Login Now
                 </Button>
               </Link>
-              <Button
-                rounded={"full"}
-                size={"lg"}
-                fontWeight={"normal"}
-                px={6}
-                leftIcon={<PhoneIcon h={4} w={4} color={"gray.300"} />}>
+              <Button rounded={"full"} size={"lg"} fontWeight={"normal"} px={6}>
                 Call Us
               </Button>
             </Stack>

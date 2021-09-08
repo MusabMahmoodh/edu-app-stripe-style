@@ -62,8 +62,8 @@ export default function HeaderLanding() {
             width="80px"
             fontWeight={"normal"}
             colorScheme={"blue"}
-            bg={"blue.400"}
-            _hover={{ bg: "blue.500" }}
+            // bg={"blue.400"}
+            _hover={{ bg: "blue.100" }}
             icon={
               isOpen ? (
                 <CloseIcon color={"gray.300"} />

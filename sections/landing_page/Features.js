@@ -61,7 +61,7 @@ export default function SplitWithImage() {
           <Stack direction={{ base: "column", md: "row" }} spacing={4}>
             <Button
               rounded={"full"}
-              bg={"blue.400"}
+              bg={"blue.500"}
               color={"white"}
               _hover={{
                 bg: "blue.500",
@@ -70,7 +70,7 @@ export default function SplitWithImage() {
             </Button>
             <Button
               rounded={"full"}
-              bg={"blue.400"}
+              bg={"blue.500"}
               color={"white"}
               _hover={{
                 bg: "blue.500",

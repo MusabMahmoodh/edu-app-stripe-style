@@ -53,7 +53,7 @@ export default function Blogs() {
     sliderClass: "",
   };
   return (
-    <Container maxW={"5xl"} py="120px" bg="blue.900" position="relative">
+    <Box bg="blue.900" position="relative">
       <Box
         width="100%"
         height="100px"
@@ -64,48 +64,50 @@ export default function Blogs() {
         zIndex="234"
         bg="white"
         clipPath="polygon(0 0, 100% 0, 100% 17%, 0 100%)"></Box>
-      <Stack spacing={4}>
-        <Text
-          textTransform={"uppercase"}
-          color={"gray.200"}
-          fontWeight={600}
-          fontSize={"sm"}
-          p={2}
-          alignSelf={"flex-start"}
-          rounded={"md"}>
-          From the Blog
-        </Text>
-        <Heading color={"gray.50"}>
-          Explore latest stories and discoveries...
-        </Heading>
-        <Text color={"gray.100"} fontSize={"lg"}>
-          Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-          nonumy eirmod tempor invidunt ut labore
-        </Text>
-        <Box>
-          <Carousel {...sliderParams} ssr>
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-          </Carousel>
-        </Box>
-        <Box
-          width="100%"
-          height="100px"
-          position="absolute"
-          right="-5px"
-          left="0"
-          bottom="-5px"
-          zIndex="234"
-          bg="white"
-          // polygon(0 0, 100% 0, 100% 17%, 0 100%)
-          clipPath="polygon(0 84%, 100% 17%, 100% 100%, 0 100%)"></Box>
-      </Stack>
-    </Container>
+      <Container maxW={"5xl"} py="120px" bg="blue.900" position="relative">
+        <Stack spacing={4}>
+          <Text
+            textTransform={"uppercase"}
+            color={"gray.200"}
+            fontWeight={600}
+            fontSize={"sm"}
+            p={2}
+            alignSelf={"flex-start"}
+            rounded={"md"}>
+            From the Blog
+          </Text>
+          <Heading color={"gray.50"}>
+            Explore latest stories and discoveries...
+          </Heading>
+          <Text color={"gray.100"} fontSize={"lg"}>
+            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+            nonumy eirmod tempor invidunt ut labore
+          </Text>
+          <Box>
+            <Carousel {...sliderParams} ssr>
+              <BlogCard />
+              <BlogCard />
+              <BlogCard />
+              <BlogCard />
+              <BlogCard />
+              <BlogCard />
+              <BlogCard />
+              <BlogCard />
+            </Carousel>
+          </Box>
+        </Stack>
+      </Container>
+      <Box
+        width="100%"
+        height="100px"
+        position="absolute"
+        right="-5px"
+        left="0"
+        bottom="-5px"
+        zIndex="234"
+        bg="white"
+        // polygon(0 0, 100% 0, 100% 17%, 0 100%)
+        clipPath="polygon(0 84%, 100% 17%, 100% 100%, 0 100%)"></Box>
+    </Box>
   );
 }

@@ -32,6 +32,7 @@ export default function Hero() {
     : `${gradientAnimation}  6s ease infinite`;
   return (
     <Box width="100%" position={"relative"}>
+      {/* Potrait */}
       <Box
         width="100%"
         height="100vh"
@@ -42,9 +43,10 @@ export default function Hero() {
         // opacity=".8"
         // backgroundSize="180% 180%"
         d={{ base: "block", md: "none" }}
-        clipPath="polygon(0 0, 100% 0, 100% 29%, 0 51%)"
+        clipPath=" polygon(0 0, 100% 0, 100% 36%, 0 50%)"
         animation={animation}
         bgGradient="linear(#B4BFF8 0%, #F8b4b4 25%, #f8e9b4 50%)"></Box>
+      {/* Landsacape */}
       <Box
         width="100%"
         height="100vh"
@@ -55,7 +57,7 @@ export default function Hero() {
         // opacity=".8"
         // backgroundSize="180% 180%"
         d={{ base: "none", md: "block" }}
-        clipPath="polygon(0 0, 100% 0, 100% 25%, 0 88%)"
+        clipPath="polygon(0 0, 100% 0, 100% 30%, 0 67%)"
         animation={animation}
         bgGradient="linear(#B4BFF8 0%, #F8b4b4 25%, #f8e9b4 50%)"></Box>
       <Container maxW={"5xl"}>

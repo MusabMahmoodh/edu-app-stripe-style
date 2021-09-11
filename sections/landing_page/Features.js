@@ -58,7 +58,7 @@ export default function SplitWithImage() {
             Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
             nonumy eirmod tempor invidunt ut labore
           </Text>
-          <Stack direction={{ base: "column", md: "row" }} spacing={4}>
+          <Stack direction={{ base: "row" }} spacing={4}>
             <Button
               rounded={"full"}
               bg={"blue.500"}

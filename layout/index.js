@@ -1,7 +1,7 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 
-import { auth } from "../firebase/initFirebase";
-import { signOut } from "firebase/auth";
+import { auth, createUser, fetchUser } from "../firebase/initFirebase";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
 import {
@@ -26,6 +26,7 @@ import {
   Divider,
   MenuItem,
   MenuList,
+  Button,
 } from "@chakra-ui/react";
 import {
   FiHome,
@@ -60,12 +61,44 @@ export default function SidebarWithHeader({ children }) {
   const userSignOut = () => {
     signOut(auth)
       .then(async () => {
-        await router.push("/");
+        await router.push("/signin");
       })
       .catch((error) => {
         alert(error);
       });
   };
+  useEffect(() => {
+    console.log("Here");
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        const isUserCreated = await fetchUser(uid);
+
+        if (isUserCreated) {
+          // setIsLoading(false);
+        } else {
+          try {
+            await router.push("/signin");
+          } catch (err) {
+            alert(err.message);
+          }
+          // setFormState(3);
+          // setIsLoading(false);
+        }
+        // ...
+      } else {
+        try {
+          await router.push("/signin");
+        } catch (err) {
+          alert(err.message);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
@@ -237,7 +270,9 @@ const MobileNav = ({ userSignOut, onOpen, ...rest }) => {
               borderColor={useColorModeValue("gray.200", "gray.700")}>
               <MenuItem>Profile</MenuItem>
 
-              <MenuItem onClick={userSignOut}>Sign out</MenuItem>
+              <MenuItem>
+                <Button onClick={userSignOut}>Sign out</Button>
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>

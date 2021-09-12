@@ -85,7 +85,7 @@ export default function Hero() {
             <Stack
               spacing={{ base: 4, sm: 6 }}
               direction={{ base: "column", sm: "row" }}>
-              <Link href="https://6138d7873a0d100007664956--eduappdashboard.netlify.app/signin">
+              <Link href="/signin">
                 <Button
                   rounded={"full"}
                   size={"lg"}

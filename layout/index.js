@@ -38,25 +38,10 @@ import {
   FiBell,
   FiChevronDown,
 } from "react-icons/fi";
-
-const LinkItems = [
-  { name: "Home", icon: FiHome },
-  { name: "My Classes", icon: FiTrendingUp },
-  { name: "Explore Classes", icon: FiCompass },
-
-  // { name: "Favourites", icon: FiStar },
-  // { name: "Settings", icon: FiSettings },
-];
-const LinkItemsConfig = [
-  { name: "Privacy Policy", icon: FiTrendingUp },
-  { name: "About Us", icon: FiCompass },
-  // { name: "Favourites", icon: FiStar },
-  // { name: "Settings", icon: FiSettings },
-];
+import { LinkItems, LinkItemsConfig } from "./link.items.data";
 
 export default function SidebarWithHeader({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const [user, loading, error] = useAuthState(auth);
   const router = useRouter();
   const userSignOut = () => {
     signOut(auth)
@@ -68,7 +53,6 @@ export default function SidebarWithHeader({ children }) {
       });
   };
   useEffect(() => {
-    console.log("Here");
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties

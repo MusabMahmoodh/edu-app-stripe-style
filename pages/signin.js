@@ -40,6 +40,7 @@ export default function SignIn() {
   const [mobNumber, setMobNumber] = useState();
   const [formState, setFormState] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+
   const [OTP, setOTP] = useState("");
   const [regData, setRegData] = useState({
     firstName: "",
@@ -67,6 +68,7 @@ export default function SignIn() {
 
   const onSignInSubmit = async (next) => {
     setIsLoading(true);
+
     // e.preventDefault();
     if (!next) {
       setUpRecaptcha();
@@ -92,6 +94,7 @@ export default function SignIn() {
         });
         console.log(error);
       });
+
     setIsLoading(false);
   };
 

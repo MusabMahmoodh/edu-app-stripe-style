@@ -16,15 +16,33 @@ import {
 const RegisterForm = ({ regData, setRegData, onRegisterSubmit }) => {
   return (
     <React.Fragment>
-      <Text>Register yourself with us!</Text>
+      <Text align={"center"}>Register yourself with us!</Text>
       <Stack spacing={4}>
         <FormControl id="firstname">
           <FormLabel>First Name</FormLabel>
-          <Input type="text" />
+          <Input
+            type="text"
+            value={regData.firstName}
+            onChange={(e) =>
+              setRegData({
+                firstName: e.target.value,
+                lastName: regData.lastName,
+              })
+            }
+          />
         </FormControl>
         <FormControl id="lastname">
           <FormLabel>Last Name</FormLabel>
-          <Input type="text" />
+          <Input
+            type="text"
+            value={regData.lastName}
+            onChange={(e) => {
+              setRegData({
+                lastName: e.target.value,
+                firstName: regData.firstName,
+              });
+            }}
+          />
         </FormControl>
         {/* <FormControl id="password">
           <FormLabel>Password</FormLabel>
@@ -38,12 +56,7 @@ const RegisterForm = ({ regData, setRegData, onRegisterSubmit }) => {
             {/* <Checkbox>Remember me</Checkbox> */}
             {/* <Link color={"blue.400"}>Forgot password?</Link> */}
           </Stack>
-          <Button
-            bg={"blue.400"}
-            color={"white"}
-            _hover={{
-              bg: "blue.500",
-            }}>
+          <Button mt="3" onClick={() => onRegisterSubmit()} colorScheme="blue">
             Register
           </Button>
         </Stack>

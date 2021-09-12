@@ -4,16 +4,24 @@ import {
   Flex,
   Box,
   Heading,
+  useColorModeValue,
   Text,
   Button,
   Image,
   keyframes,
   usePrefersReducedMotion,
 } from "@chakra-ui/react";
-import Link from "next/link";
+import { memo, useEffect, useRef, useState } from "react";
+import {
+  onAuthStateChanged,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
+import { auth, createUser, fetchUser, db } from "../firebase/initFirebase";
+import PhoneNumberForm from "../containers/PhoneNumber";
+import OTPForm from "../containers/OTPForm";
+import RegisterForm from "../containers/RegisterForm";
 
-import { PhoneIcon } from "@chakra-ui/icons";
-import LandinPageHeader from "../components/Header.LandingPage";
 const gradientAnimation = keyframes`
      0% {
     opacity: 0.6;
@@ -25,14 +33,144 @@ const gradientAnimation = keyframes`
     opacity: 0.6;
   }
 `;
-export default function Hero() {
+export default function SignIn() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const [mobNumber, setMobNumber] = useState();
+  const [formState, setFormState] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+  const [OTP, setOTP] = useState("");
+  const [regData, setRegData] = useState({
+    firstName: "",
+    lastName: "",
+  });
+  const element = useRef(null);
+
+  const setUpRecaptcha = async () => {
+    try {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha-container",
+        {
+          size: "invisible",
+          callback: (response) => {
+            // reCAPTCHA solved, allow signInWithPhoneNumber.
+            onSignInSubmit((next = true));
+          },
+        },
+        auth
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onSignInSubmit = async (next) => {
+    setIsLoading(true);
+    // e.preventDefault();
+    if (!next) {
+      setUpRecaptcha();
+    }
+
+    const phoneNumber = `+${mobNumber}`;
+    const appVerifier = window.recaptchaVerifier;
+
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        // SMS sent. Prompt user to type the code from the message, then sign the
+        // user in with confirmationResult.confirm(code).
+        window.confirmationResult = confirmationResult;
+        setFormState(2);
+        // ...
+        // const code = getCodeFromUserInput();
+      })
+      .catch((error) => {
+        // Error; SMS not sent
+        // ...
+        window.recaptchaVerifier?.render().then(function (widgetId) {
+          grecaptcha.reset(widgetId);
+        });
+        console.log(error);
+      });
+    setIsLoading(false);
+  };
+
+  const onOTPsubmit = () => {
+    setIsLoading(true);
+    window.confirmationResult
+      .confirm(OTP)
+      .then(async (result) => {
+        // User signed in successfully.
+        const user = result.user;
+
+        fetchUser(user.uid);
+        setFormState(3);
+      })
+      .catch((error) => {
+        // User couldn't sign in (bad verification code?)
+        // ...
+        window.recaptchaVerifier?.render().then(function (widgetId) {
+          grecaptcha.reset(widgetId);
+        });
+        console.log(error);
+      });
+    setIsLoading(false);
+  };
+
+  const registerUser = () => {
+    setIsLoading(true);
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+
+        const isUserCreated = await createUser(uid, {
+          ...regData,
+          phoneNumber: `+${mobNumber}`,
+        });
+        if (isUserCreated) {
+          setFormState(4);
+        } else {
+          setFormState(1);
+        }
+        // ...
+      } else {
+      }
+    });
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        const uid = user.uid;
+        const isUserCreated = await fetchUser(uid);
+
+        if (isUserCreated) {
+          setFormState(4);
+          setIsLoading(false);
+        } else {
+          setFormState(3);
+          setIsLoading(false);
+        }
+        // ...
+      } else {
+        // User is signed out
+        // ...
+        setIsLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const animation = prefersReducedMotion
     ? undefined
     : `${gradientAnimation}  6s ease infinite`;
   return (
     <Box width="100%" position={"relative"}>
+      {/* Potrait */}
       <Box
         width="100%"
         height="100vh"
@@ -42,70 +180,68 @@ export default function Hero() {
         zIndex="-234"
         // opacity=".8"
         // backgroundSize="180% 180%"
-        clipPath="polygon(0 0, 100% 0, 100% 29%, 0 85%)"
+        d={{ base: "block", md: "none" }}
+        clipPath=" polygon(0 0, 100% 0, 100% 36%, 0 50%)"
         animation={animation}
-        bgGradient="linear(red.500 0%, pink.500 25%, yellow.500 50%)"></Box>
+        bgGradient="linear(#B4BFF8 0%, #F8b4b4 25%, #f8e9b4 50%)"></Box>
+      {/* Landsacape */}
+      <Box
+        width="100%"
+        height="100vh"
+        position="absolute"
+        top="0"
+        left="0"
+        zIndex="-234"
+        // opacity=".8"
+        // backgroundSize="180% 180%"
+        d={{ base: "none", md: "block" }}
+        clipPath="polygon(0 0, 100% 0, 100% 30%, 0 67%)"
+        animation={animation}
+        bgGradient="linear(#B4BFF8 0%, #F8b4b4 25%, #f8e9b4 50%)"></Box>
       <Container maxW={"5xl"}>
-        <LandinPageHeader />
+        <Box p="2">
+          <Heading size="md">App Name</Heading>
+        </Box>
         <Stack
           align={"center"}
           spacing={{ base: 8, md: 10 }}
           py={{ base: 20, md: 28 }}
           direction={{ base: "column", md: "row" }}>
           <Stack flex={1} spacing={{ base: 5, md: 10 }}>
-            <Heading
-              lineHeight={1.1}
-              fontWeight={600}
-              fontSize={{ base: "3xl", sm: "4xl", lg: "6xl" }}>
-              <Text
-                as={"span"}
-                position={"relative"}
-                _after={{
-                  content: "''",
-                  width: "full",
-                  height: "30%",
-                  position: "absolute",
-                  bottom: 1,
-                  left: 0,
-                  bg: "blue.400",
-                  zIndex: -1,
-                }}>
-                Learn Anywhere,
-              </Text>
-              <br />
-              <Text as={"span"} color={"blue.400"}>
-                use everywhere!
-              </Text>
-            </Heading>
-            <Text color={"gray.500"}>
-              Snippy is a rich coding snippets app that lets you create your own
-              code snippets, categorize them, and even sync them in the cloud so
-              you can use them anywhere. All that is free!
-            </Text>
-            <Stack
-              spacing={{ base: 4, sm: 6 }}
-              direction={{ base: "column", sm: "row" }}>
-              <Link href="/signin">
-                <Button
-                  rounded={"full"}
-                  size={"lg"}
-                  fontWeight={"normal"}
-                  px={6}
-                  colorScheme={"blue"}
-                  bg={"blue.400"}
-                  _hover={{ bg: "blue.500" }}>
-                  Login Now
-                </Button>
-              </Link>
-              <Button
-                rounded={"full"}
-                size={"lg"}
-                fontWeight={"normal"}
-                px={6}
-                leftIcon={<PhoneIcon h={4} w={4} color={"gray.300"} />}>
-                Call Us
-              </Button>
-            </Stack>
+            <Box
+              role={"group"}
+              p={6}
+              maxW={"330px"}
+              w={"full"}
+              bg={useColorModeValue("white", "gray.800")}
+              boxShadow={"2xl"}
+              rounded={"lg"}
+              pos={"relative"}
+              zIndex={1}>
+              <Heading size="md" align={"center"} p={8}>
+                Ready to rock’in the class?
+              </Heading>
+              {isLoading ? (
+                <h5>Loading...</h5>
+              ) : formState === 1 ? (
+                <PhoneNumberForm
+                  mobNumber={mobNumber}
+                  setMobNumber={setMobNumber}
+                  onSignInSubmit={onSignInSubmit}
+                  ref={element}
+                />
+              ) : formState === 2 ? (
+                <OTPForm OTP={OTP} setOTP={setOTP} confirmOTP={onOTPsubmit} />
+              ) : formState === 3 ? (
+                <RegisterForm
+                  regData={regData}
+                  setRegData={setRegData}
+                  onRegisterSubmit={registerUser}
+                />
+              ) : (
+                <h3>User logged in</h3>
+              )}
+            </Box>
           </Stack>
           <Flex
             flex={1}

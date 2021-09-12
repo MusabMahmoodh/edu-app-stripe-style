@@ -86,7 +86,7 @@ export default function Hero() {
               you can use them anywhere. All that is free!
             </Text>
             <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: "row" }}>
-              <Link href="https://6138d7873a0d100007664956--eduappdashboard.netlify.app/signin">
+              <Link href="https://app.eduappcheck.tk/signin">
                 <Button
                   rounded={"full"}
                   size={"lg"}

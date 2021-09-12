@@ -10,13 +10,7 @@ function Application({ Component, pageProps }) {
 
   return (
     <ChakraProvider theme={theme}>
-      {Component.name === "SignIn" ? (
-        <Component {...pageProps} />
-      ) : (
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      )}
+      <Component {...pageProps} />
     </ChakraProvider>
   );
 }

@@ -6,7 +6,7 @@ import {
   PayhereCheckout,
   CheckoutParams,
 } from "payhere-js-sdk";
-
+import Layout from "../layout";
 // import { fetchUser, auth } from "../../firebase/initFirebase";
 export default function IndexPage() {
   function onPayhereCheckoutError(errorMsg) {
@@ -47,7 +47,7 @@ export default function IndexPage() {
   }
 
   return (
-    <div>
+    <Layout>
       <h4>DashBoard</h4>
       {/* {JSON.stringify(user)} */}
       <h6>Courses you have enrolled</h6>
@@ -61,6 +61,6 @@ export default function IndexPage() {
           <button onClick={checkout}>purchase</button>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

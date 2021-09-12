@@ -7,22 +7,18 @@ import theme from "../theme";
 import Layout from "../layout";
 function Application({ Component, pageProps }) {
   Payhere.init("1218521", AccountCategory.SANDBOX);
-  switch (Component.name) {
-    case "SignIn":
-      return (
-        <ChakraProvider theme={theme}>
+
+  return (
+    <ChakraProvider theme={theme}>
+      {Component.name === "SignIn" ? (
+        <Component {...pageProps} />
+      ) : (
+        <Layout>
           <Component {...pageProps} />
-        </ChakraProvider>
-      );
-    default:
-      return (
-        <ChakraProvider theme={theme}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </ChakraProvider>
-      );
-  }
+        </Layout>
+      )}
+    </ChakraProvider>
+  );
 }
 
 export default Application;

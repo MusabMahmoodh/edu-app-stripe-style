@@ -21,6 +21,7 @@ import { auth, createUser, fetchUser, db } from "../firebase/initFirebase";
 import PhoneNumberForm from "../containers/PhoneNumber";
 import OTPForm from "../containers/OTPForm";
 import RegisterForm from "../containers/RegisterForm";
+import { useRouter } from "next/router";
 
 const gradientAnimation = keyframes`
      0% {
@@ -34,6 +35,7 @@ const gradientAnimation = keyframes`
   }
 `;
 export default function SignIn() {
+  const router = useRouter();
   const prefersReducedMotion = usePrefersReducedMotion();
   const [mobNumber, setMobNumber] = useState();
   const [formState, setFormState] = useState(1);
@@ -127,10 +129,21 @@ export default function SignIn() {
           ...regData,
           phoneNumber: `+${mobNumber}`,
         });
-        if (isUserCreated) {
-          setFormState(4);
-        } else {
-          setFormState(1);
+        if (!loading && user) {
+          const uid = user.uid;
+          const isUserCreated = await fetchUser(uid);
+          if (isUserCreated) {
+            try {
+              await router.push("/");
+            } catch (err) {
+              alert(err.message);
+            }
+            setCheckUserLoading(false);
+          } else {
+            setCheckUserLoading(false);
+          }
+        } else if (!loading && !user) {
+          setCheckUserLoading(false);
         }
         // ...
       } else {
@@ -148,8 +161,12 @@ export default function SignIn() {
         const isUserCreated = await fetchUser(uid);
 
         if (isUserCreated) {
-          setFormState(4);
           setIsLoading(false);
+          try {
+            await router.push("/");
+          } catch (err) {
+            alert(err.message);
+          }
         } else {
           setFormState(3);
           setIsLoading(false);

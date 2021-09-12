@@ -19,13 +19,13 @@ import { USERS } from "./collection.constants";
 // Your web app's Firebase configuration
 const firebaseConfig = {
   // process.env.NEXT_PUBLIC_FIREBASE_API_KEY
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  databaseURL: process.env.NEXT_PUBLIC_FIREBASE_DB_URL,
+  apiKey: "AIzaSyCJFn5x9X0rMn-NHt-W3fiAxjk7kiPqPN4",
+  authDomain: "app-edu-app-dev.firebaseapp.com",
+  projectId: "app-edu-app-dev",
+  databaseURL: "https://app-edu-app-dev.firebaseio.com",
   // storageBucket: "azeem-nana.appspot.com",
   // messagingSenderId: "918908909068",
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  appId: "1:322592366593:web:ed5f4b47f58dc5fb37a000",
 };
 
 const app = initializeApp(firebaseConfig);

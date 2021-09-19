@@ -17,11 +17,12 @@ import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from "firebase/auth";
-import { auth, createUser, fetchUser, db } from "../firebase/initFirebase";
+import { auth } from "../firebase/initFirebase";
 import PhoneNumberForm from "../containers/PhoneNumber";
 import OTPForm from "../containers/OTPForm";
 import RegisterForm from "../containers/RegisterForm";
 import { useRouter } from "next/router";
+import currentUser from "../models/user.models";
 
 const gradientAnimation = keyframes`
      0% {
@@ -104,9 +105,8 @@ export default function SignIn() {
       .confirm(OTP)
       .then(async (result) => {
         // User signed in successfully.
-        const user = result.user;
 
-        fetchUser(user.uid);
+        currentUser.userId(result.user.uid);
         setFormState(3);
       })
       .catch((error) => {
@@ -127,27 +127,26 @@ export default function SignIn() {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
-
-        const isUserCreated = await createUser(uid, {
-          ...regData,
-          phoneNumber: `+${mobNumber}`,
-        });
+        currentUser(uid);
+        currentUser.mobileNumber(mobNumber);
+        const isUserCreated = user.save();
         if (!loading && user) {
-          const uid = user.uid;
-          const isUserCreated = await fetchUser(uid);
+          const uid = user.userId;
+          const isUserCreated = await user.getUserById();
           if (isUserCreated) {
             try {
               await router.push("/");
             } catch (err) {
               alert(err.message);
             }
-            setCheckUserLoading(false);
+            // setCheckUserLoading(false);
           } else {
-            setCheckUserLoading(false);
+            // setCheckUserLoading(false);
           }
-        } else if (!loading && !user) {
-          setCheckUserLoading(false);
         }
+        // else if (!loading && !user) {
+        //     // setCheckUserLoading(false);
+        //   }
         // ...
       } else {
       }
@@ -161,7 +160,8 @@ export default function SignIn() {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
-        const isUserCreated = await fetchUser(uid);
+        currentUser.userId = uid;
+        const isUserCreated = await currentUser.getUserById();
 
         if (isUserCreated) {
           setIsLoading(false);

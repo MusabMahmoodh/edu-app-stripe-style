@@ -1,6 +1,6 @@
 import React, { ReactNode, useEffect } from "react";
 
-import { auth, createUser, fetchUser } from "../firebase/initFirebase";
+import { auth } from "../firebase/initFirebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -38,6 +38,7 @@ import {
   FiBell,
   FiChevronDown,
 } from "react-icons/fi";
+import currentUser from "../models/user.models";
 import { LinkItems, LinkItemsConfig } from "./link.items.data";
 
 export default function SidebarWithHeader({ children }) {
@@ -46,6 +47,7 @@ export default function SidebarWithHeader({ children }) {
   const userSignOut = () => {
     signOut(auth)
       .then(async () => {
+        currentUser.releaseUser();
         await router.push("/signin");
       })
       .catch((error) => {
@@ -58,7 +60,8 @@ export default function SidebarWithHeader({ children }) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
-        const isUserCreated = await fetchUser(uid);
+        currentUser.userId = uid;
+        const isUserCreated = await currentUser.getUserById();
 
         if (isUserCreated) {
           // setIsLoading(false);

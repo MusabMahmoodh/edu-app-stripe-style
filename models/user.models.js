@@ -119,20 +119,16 @@ class User {
 
   //Functions
   async save() {
-    const res = await createUser(
-      this.userId,
-      this.userType,
-      this.activeUserType,
-      this.mobileNumber,
-      this.email,
-      this.firstName,
-      this.lastName,
-      this.dateOfBirth,
-      this.profilePic,
-      this.tutorId,
-      this.tutorQualification,
-      this.tutorVerificationStatus
-    );
+    const res = await createUser(this.userId, {
+      userType: this.userType,
+      activeUserType: this.activeUserType,
+      mobileNumber: this.mobileNumber,
+      email: this.email,
+      firstName: this.firstName,
+      lastName: this.lastName,
+      dateOfBirth: this.dateOfBirth,
+      profilePic: this.profilePic,
+    });
 
     return res;
   }
@@ -143,6 +139,25 @@ class User {
 
   releaseUser() {
     this.userId = null;
+  }
+
+  updateUserAllFields({
+    userType,
+    mobileNumber,
+    email,
+    firstName,
+    lastName,
+    dateOfBirth,
+    profilePic,
+  }) {
+    this.userType = userType;
+
+    this.mobileNumber = mobileNumber;
+    this.email = email;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.dateOfBirth = dateOfBirth;
+    this.profilePic = profilePic;
   }
 }
 

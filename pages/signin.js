@@ -120,34 +120,17 @@ export default function SignIn() {
     setIsLoading(false);
   };
 
-  const registerUser = () => {
+  const registerUser = async (values) => {
     setIsLoading(true);
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
-        currentUser(uid);
-        currentUser.mobileNumber(mobNumber);
-        const isUserCreated = user.save();
-        if (!loading && user) {
-          const uid = user.userId;
-          const isUserCreated = await user.getUserById();
-          if (isUserCreated) {
-            try {
-              await router.push("/");
-            } catch (err) {
-              alert(err.message);
-            }
-            // setCheckUserLoading(false);
-          } else {
-            // setCheckUserLoading(false);
-          }
-        }
-        // else if (!loading && !user) {
-        //     // setCheckUserLoading(false);
-        //   }
-        // ...
+        currentUser.userId = uid;
+        currentUser.updateUserAllFields(values);
+        await currentUser.save();
+        await router.push("/");
       } else {
       }
     });
@@ -158,6 +141,7 @@ export default function SignIn() {
     setIsLoading(true);
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        setMobNumber(user.phoneNumber);
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/firebase.User
         const uid = user.uid;
@@ -259,6 +243,7 @@ export default function SignIn() {
                   regData={regData}
                   setRegData={setRegData}
                   onRegisterSubmit={registerUser}
+                  mobNumber={mobNumber}
                 />
               ) : (
                 <h3>User logged in</h3>

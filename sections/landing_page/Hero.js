@@ -14,6 +14,7 @@ import Link from "next/link";
 
 import { PhoneIcon } from "@chakra-ui/icons";
 import LandinPageHeader from "../../components/Header.LandingPage";
+import { SIGN_IN } from "constants/routes";
 const gradientAnimation = keyframes`
      0% {
     opacity: 0.6;
@@ -85,7 +86,7 @@ export default function Hero() {
             <Stack
               spacing={{ base: 4, sm: 6 }}
               direction={{ base: "column", sm: "row" }}>
-              <Link href="/signin">
+              <Link href={SIGN_IN}>
                 <Button
                   rounded={"full"}
                   size={"lg"}

@@ -1,9 +1,8 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 
 import { auth } from "../firebase/initFirebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "next/router";
-import { useAuthState } from "react-firebase-hooks/auth";
 import {
   IconButton,
   Avatar,
@@ -40,21 +39,29 @@ import {
 } from "react-icons/fi";
 import currentUser from "../models/user.models";
 import { LinkItems, LinkItemsConfig } from "./link.items.data";
+import { SIGN_IN } from "constants/routes";
+import SpinnerGlobal from "@components/Spinner.global";
 
 export default function SidebarWithHeader({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isUserChecking, setIsUserChecking] = useState(true);
   const router = useRouter();
   const userSignOut = () => {
+    setIsLoggingOut(true);
     signOut(auth)
       .then(async () => {
+        setIsLoggingOut(false);
         currentUser.releaseUser();
-        await router.push("/signin");
+        await router.push(SIGN_IN);
       })
       .catch((error) => {
+        setIsLoggingOut(false);
         alert(error);
       });
   };
   useEffect(() => {
+    setIsUserChecking(true);
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -65,9 +72,11 @@ export default function SidebarWithHeader({ children }) {
 
         if (isUserCreated) {
           // setIsLoading(false);
+          setIsUserChecking(false);
         } else {
           try {
-            await router.push("/signin");
+            await router.push(SIGN_IN);
+            setIsUserChecking(false);
           } catch (err) {
             alert(err.message);
           }
@@ -77,10 +86,11 @@ export default function SidebarWithHeader({ children }) {
         // ...
       } else {
         try {
-          await router.push("/signin");
+          await router.push(SIGN_IN);
         } catch (err) {
           alert(err.message);
         }
+        setIsUserChecking(false);
       }
     });
 
@@ -89,27 +99,37 @@ export default function SidebarWithHeader({ children }) {
 
   return (
     <Box minH="100vh" bg={useColorModeValue("gray.100", "gray.900")}>
-      <SidebarContent
-        onClose={() => onClose}
-        display={{ base: "none", md: "block" }}
-      />
-      <Drawer
-        autoFocus={false}
-        isOpen={isOpen}
-        placement="left"
-        onClose={onClose}
-        returnFocusOnClose={false}
-        onOverlayClick={onClose}
-        size="full">
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      {/* mobilenav */}
-      <MobileNav onOpen={onOpen} userSignOut={userSignOut} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
-        {children}
-      </Box>
+      {isUserChecking ? (
+        <SpinnerGlobal />
+      ) : (
+        <>
+          <SidebarContent
+            onClose={() => onClose}
+            display={{ base: "none", md: "block" }}
+          />
+          <Drawer
+            autoFocus={false}
+            isOpen={isOpen}
+            placement="left"
+            onClose={onClose}
+            returnFocusOnClose={false}
+            onOverlayClick={onClose}
+            size="full">
+            <DrawerContent>
+              <SidebarContent onClose={onClose} />
+            </DrawerContent>
+          </Drawer>
+          {/* mobilenav */}
+          <MobileNav
+            onOpen={onOpen}
+            userSignOut={userSignOut}
+            isLoggingOut={isLoggingOut}
+          />
+          <Box ml={{ base: 0, md: 60 }} p="4">
+            {children}
+          </Box>
+        </>
+      )}
     </Box>
   );
 }
@@ -184,7 +204,7 @@ const NavItem = ({ icon, children, ...rest }) => {
   );
 };
 
-const MobileNav = ({ userSignOut, onOpen, ...rest }) => {
+const MobileNav = ({ userSignOut, onOpen, isLoggingOut, ...rest }) => {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -258,7 +278,11 @@ const MobileNav = ({ userSignOut, onOpen, ...rest }) => {
               <MenuItem>Profile</MenuItem>
 
               <MenuItem>
-                <Button onClick={userSignOut}>Sign out</Button>
+                {isLoggingOut ? (
+                  <SpinnerGlobal />
+                ) : (
+                  <Button onClick={userSignOut}>Sign out</Button>
+                )}
               </MenuItem>
             </MenuList>
           </Menu>

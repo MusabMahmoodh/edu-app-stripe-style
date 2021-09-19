@@ -155,6 +155,7 @@ export default function SignIn() {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
@@ -180,6 +181,7 @@ export default function SignIn() {
         // ...
         setIsLoading(false);
       }
+      setIsLoading(false);
     });
 
     return () => unsubscribe();
